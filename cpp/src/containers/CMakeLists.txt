@@ -7,6 +7,8 @@ file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${Folio_SOURCE_DIR}/include/containers/
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(containers SimpleVec.cpp ${HEADER_LIST})
 
+target_link_libraries(containers PRIVATE spdlog::spdlog fmt::fmt)
+
 # We need this directory, and users of our library will need it too
 target_include_directories(containers PUBLIC ../../include)
 

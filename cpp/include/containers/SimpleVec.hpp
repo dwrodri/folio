@@ -34,11 +34,11 @@ namespace folio
     // copy c'tor
     SimpleVec(SimpleVec const &other);
     // move c'tor
-    SimpleVec(SimpleVec const &&other);
+    SimpleVec(SimpleVec &&other);
     // copy assign op performs a shallow copy
     SimpleVec &operator=(SimpleVec const &other);
     // move assign op
-    SimpleVec &&operator=(SimpleVec const &&other);
+    SimpleVec &&operator=(SimpleVec &&other);
     // d'tor
     ~SimpleVec();
 
@@ -55,9 +55,9 @@ namespace folio
     int64_t popBack();
 
     /// read-write ref to first value
-    int64_t &front();
+    int64_t &front() const;
 
-    int64_t &back();
+    int64_t &back() const;
 
     int64_t &operator[](const size_t index);
 

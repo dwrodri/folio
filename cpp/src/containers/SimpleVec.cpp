@@ -1,3 +1,5 @@
+#include <spdlog/spdlog.h>
+
 #include <containers/SimpleVec.hpp>
 #include <iostream>
 #include <cstring>
@@ -19,13 +21,19 @@ namespace folio
       : allocator_{},
         memory_loc_{allocator_.allocate(DEFAULT_INITIAL_SIMPLEVEC_CAPACITY)},
         capacity_{DEFAULT_INITIAL_SIMPLEVEC_CAPACITY},
-        size_{0} {}
+        size_{0}
+  {
+    spdlog::trace("Default c'tor");
+  }
 
   SimpleVec::SimpleVec(size_t const capacity)
       : allocator_{},
         memory_loc_{allocator_.allocate(capacity)},
         capacity_{capacity},
-        size_{0} {}
+        size_{0}
+  {
+    spdlog::trace("Parameterized c'tor");
+  }
 
   SimpleVec::SimpleVec(SimpleVec const &other)
       : allocator_{},
@@ -33,6 +41,7 @@ namespace folio
         capacity_{other.capacity()},
         size_{other.size()}
   {
+    spdlog::trace("Copy c'tor");
     // does this always perform a deep copy?
     for (size_t i = 0; i < size_; i++)
     {
@@ -40,37 +49,47 @@ namespace folio
     }
   }
 
-  SimpleVec::SimpleVec(SimpleVec const &&other)
+  SimpleVec::SimpleVec(SimpleVec &&other)
       : allocator_{},
         memory_loc_{std::forward<int64_t *const>(other.memory_loc_)},
         capacity_{std::forward<const size_t>(other.capacity_)},
         size_{std::forward<const size_t>(other.size_)}
   {
+    other.memory_loc_ = nullptr;
+    spdlog::trace("move c'tor");
   }
 
   SimpleVec &SimpleVec::operator=(SimpleVec const &other)
   {
-    if (capacity_ != 0)
+    spdlog::trace("copy assign c'tor");
+    allocator_ = other.allocator_;
+    if (capacity_ != other.capacity_)
     {
       allocator_.deallocate(memory_loc_, capacity_);
+      memory_loc_ = allocator_.allocate(other.capacity());
+      capacity_ = other.capacity_;
     }
-    allocator_ = other.allocator_;
     std::memcpy(memory_loc_, other.memory_loc_, other.capacity_);
-    capacity_ = other.capacity_;
     size_ = other.size_;
     return *this;
   }
 
-  SimpleVec &&SimpleVec::operator=(SimpleVec const &&other)
+  SimpleVec &&SimpleVec::operator=(SimpleVec &&other)
   {
+    spdlog::trace("move assign c'tor");
     memory_loc_ = std::forward<int64_t *const>(other.memory_loc_);
     capacity_ = std::forward<size_t const>(other.capacity_);
     size_ = std::forward<size_t const>(other.size_);
+    other.memory_loc_ = nullptr;
     return std::forward<SimpleVec>(*this);
   }
 
   // d'tor
-  SimpleVec::~SimpleVec() { allocator_.deallocate(memory_loc_, capacity_); }
+  SimpleVec::~SimpleVec()
+  {
+    spdlog::trace("d'tor");
+    allocator_.deallocate(memory_loc_, capacity_);
+  }
 
   size_t SimpleVec::capacity() const { return capacity_; }
 
@@ -93,9 +112,9 @@ namespace folio
     return popped;
   }
 
-  int64_t &SimpleVec::front() { return memory_loc_[0]; }
+  int64_t &SimpleVec::front() const { return memory_loc_[0]; }
 
-  int64_t &SimpleVec::back() { return memory_loc_[size_ - 1]; }
+  int64_t &SimpleVec::back() const { return memory_loc_[size_ - 1]; }
 
   int64_t &SimpleVec::operator[](const size_t index) { return memory_loc_[index]; }
 
