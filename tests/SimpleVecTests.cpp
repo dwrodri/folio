@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
+#include <functional>
 
 #include "../src/containers/SimpleVec.hpp"
 
@@ -71,4 +72,12 @@ TEST_CASE("popBack", "[main]") {
     int64_t val = v.popBack();
     REQUIRE(val == 13);
     REQUIRE(v.size() == 1);
+}
+
+TEST_CASE("isSorted", "[main]") {
+    folio::SimpleVec<int> v;
+    v.pushBack(1);
+    v.pushBack(2);
+    v.pushBack(3);
+    REQUIRE(v.isSorted([](const int a, const int b) { return a < b; }));
 }

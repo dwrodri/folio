@@ -1,5 +1,6 @@
 #pragma once
 #include <cstring>
+#include <functional>
 #include <memory>
 
 namespace folio {
@@ -56,10 +57,14 @@ class SimpleVec {
     /// read-only ref to last value
     T& back() const;
 
-    /// index operator which
+    /// index operator
     T& operator[](const size_t index) noexcept;
 
+    /// index operator
     T& operator[](const size_t index) const noexcept;
+
+    /// check if contents are sorted
+    bool isSorted(std::function<bool(T const, T const)> comp = std::less<T>()) const;
 };
 
 template <typename T>
@@ -180,5 +185,15 @@ T& SimpleVec<T>::operator[](const size_t index) noexcept {
 template <typename T>
 T& SimpleVec<T>::operator[](const size_t index) const noexcept {
     return memory_loc_[index];
+}
+
+template <typename T>
+bool SimpleVec<T>::isSorted(std::function<bool(T const, T const)> comp) const {
+    for (int i = 0; i < size_ - 1; i++) {
+        if (!comp(memory_loc_[i], memory_loc_[i + 1])) {
+            return false;
+        }
+    }
+    return true;
 }
 }  // namespace folio
