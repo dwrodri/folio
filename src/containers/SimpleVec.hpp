@@ -52,7 +52,7 @@ class SimpleVec {
     T popBack();
 
     /// read-only ref to first value
-    T& Front() const;
+    T& front() const;
 
     /// read-only ref to last value
     T& back() const;
@@ -168,7 +168,7 @@ T SimpleVec<T>::popBack() {
 }
 
 template <typename T>
-T& SimpleVec<T>::Front() const {
+T& SimpleVec<T>::front() const {
     return memory_loc_[0];
 }
 

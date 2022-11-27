@@ -56,7 +56,7 @@ TEST_CASE("move assign c'tor", "[main]") {
 TEST_CASE("front", "[main]") {
     folio::SimpleVec<int> v;
     v[0] = 12;
-    REQUIRE(v.Front() == 12);
+    REQUIRE(v.front() == 12);
 }
 
 TEST_CASE("back", "[main]") {
@@ -79,5 +79,5 @@ TEST_CASE("isSorted", "[main]") {
     v.pushBack(1);
     v.pushBack(2);
     v.pushBack(3);
-    REQUIRE(v.isSorted([](const int a, const int b) { return a < b; }));
+    REQUIRE(v.isSorted());
 }

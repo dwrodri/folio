@@ -22,7 +22,7 @@
             "type": "cppdbg",
             "request": "launch",
             "targetArchitecture": "x64",
-            "program": "${workspaceFolder}/build/tests/simplevec_test",
+            "program": "${workspaceFolder}/build/tests/binarytree_test",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
