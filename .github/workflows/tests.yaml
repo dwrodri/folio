@@ -10,7 +10,7 @@ jobs:
     container: debian:bullseye-slim
     steps:
       - name: update apt + install CMake and g++
-        run: sudo apt-get update -q && sudo apt-get install -y cmake g++ git
+        run: apt-get update -q && apt-get install -y cmake g++ git
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Let CMake configure repo
@@ -25,7 +25,7 @@ jobs:
     container: debian:bullseye-slim
     steps:
       - name: update apt + install CMake and g++
-        run: sudo apt-get update -q && sudo apt-get install -y cmake clang++ git
+        run: apt-get update -q && apt-get install -y cmake clang++ git
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Let Cmake configure repo
