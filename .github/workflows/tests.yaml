@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: update apt + install CMake and g++
-        run: sudo apt-get update -q && sudo apt-get install cmake g++
+        run: sudo apt-get update -q && sudo apt-get install -y cmake g++
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Let Cmake repo
+      - name: Let Cmake configure repo
         run: cmake -S . -B build/
       - name: Build repo
         run: cmake --build build/
