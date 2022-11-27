@@ -12,11 +12,29 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -y cmake g++
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Let Cmake configure repo
+      - name: Let CMake configure repo
         run: cmake -S . -B build/
-      - name: Build repo
+      - name: Build Repo
         run: cmake --build build/
       - name: Run Unit Tests
         run: cd build/tests && ctest
+  unit-tests-clang:
+    name: Unit tests w/ clang
+    runs-on: ubuntu-latest
+    steps:
+      - name: update apt + install CMake and g++
+        run: sudo apt-get update -q && sudo apt-get install -y cmake clang++
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Let Cmake configure repo
+        run: CXX=/usr/bin/clang cmake -S . -B build/
+      - name: Build repo
+        run: CXX=/usr/bin/clang cmake --build build/
+      - name: Run Unit Tests
+        run: cd build/tests && ctest
+  
+
+    
+  
 
     

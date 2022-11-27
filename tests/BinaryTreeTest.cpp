@@ -10,7 +10,7 @@ TEST_CASE("default c'tor", "[main]") {
 }
 
 TEST_CASE("init list c'tor", "[main]") {
-    folio::BinaryTree<char> b{'q', 'w', 'e', 'r', 't', 'y'};
+    folio::BinaryTree<char> b = {'q', 'w', 'e', 'r', 't', 'y'};
     REQUIRE(b.root()->value == 'q');
 }
 
