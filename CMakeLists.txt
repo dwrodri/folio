@@ -51,7 +51,7 @@ else()
 endif()
 
 # library code here
-add_subdirectory(src/containers)
+# add_subdirectory(src/containers)
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well

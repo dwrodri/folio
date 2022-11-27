@@ -12,6 +12,16 @@
             ],
             "compilerPath": "/usr/bin/clang",
             "intelliSenseMode": "macos-clang-arm64"
+        },
+        {
+            "name": "Debian",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "intelliSenseMode": "linux-clang-x64",
+            "cppStandard": "c++17"
         }
     ],
     "version": 4
