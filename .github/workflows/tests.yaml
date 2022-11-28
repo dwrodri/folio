@@ -16,22 +16,26 @@ jobs:
       - name: Let CMake configure repo
         run: cmake -S . -B build/
       - name: Build Repo
-        run: cmake --build build/
+        run: cmake --build build/ --parallel
       - name: Run Unit Tests
         run: cd build/tests && ctest
   unit-tests-clang:
-    name: Unit tests w/ clang
+    name: Unit tests w/ clang 14
     runs-on: ubuntu-latest
     container: debian:bullseye-slim
     steps:
-      - name: update apt + install CMake and g++
-        run: apt-get update -q && apt-get install -y cmake clang++ git
+      - name: download first round of dependencies
+        run: apt-get update && apt-get install -y lsb-release wget software-properties-common gnupg cmake git
+      - name: add the LLVM repos to apt
+      - run: wget -nd -np https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh 14
+      - name: update apt + install CMake and Clang
+        run: apt-get update -q && apt-get install -y clang++-14
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Let Cmake configure repo
-        run: CXX=/usr/bin/clang cmake -S . -B build/
+      - name: Let CMake configure repo
+        run: CXX=/usr/bin/clang++-14 cmake -S . -B build/
       - name: Build repo
-        run: CXX=/usr/bin/clang cmake --build build/
+        run: CXX=/usr/bin/clang++-14 cmake --build build/ --parallel
       - name: Run Unit Tests
         run: cd build/tests && ctest
   
