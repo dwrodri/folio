@@ -5,7 +5,7 @@
 #include "../src/algos/Sorts.hpp"
 
 template <typename T>
-void logVec(folio::SimpleVec<T> v) {
+void logVec(folio::SimpleVec<T>& v) {
     std::cout << "[ ";
     size_t i = 0;
     for (; i < v.size() - 1; i++) {
@@ -15,11 +15,13 @@ void logVec(folio::SimpleVec<T> v) {
 }
 
 TEST_CASE("BubbleSort", "[main]") {
-    folio::SimpleVec<int> v;
+    folio::SimpleVec<int> v{24};
     for (int i = 0; i < 12; i++) {
         v.pushBack(100 - i);
     }
+    logVec(v);
     folio::BubbleSort(v);
+    logVec(v);
     REQUIRE(v.isSorted());
 }
 

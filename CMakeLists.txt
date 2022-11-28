@@ -22,6 +22,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Let's ensure -std=c++xx instead of -std=g++xx
     set(CMAKE_CXX_EXTENSIONS OFF)
 
+    
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_options(-fsanitize=address -fsanitize=undefined)
+    endif()
     # Let's nicely support folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
@@ -31,6 +35,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 
 # add platform flag
 add_compile_definitions(DARCH=${CMAKE_SYSTEM_PROCESSOR})
+
+#add warnings
+add_compile_options(-Wall -Wextra)
 
 # facilitate perf tracing by preserving frame pointers
 add_compile_options(-fno-omit-frame-pointer)
@@ -43,11 +50,10 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
 elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
     add_compile_definitions(MIN_SIZE_REL_BUILD)
 else()
-    add_compile_definitions(RELEASE_BUILD=1)
+    add_compile_definitions(RELEASE_BUILD)
 endif()
 
-# library code here
-# add_subdirectory(src/containers)
+add_subdirectory(apps)
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well

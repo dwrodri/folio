@@ -1,0 +1,2 @@
+
+add_executable(queens_kill_king QueensKillKing.cpp)

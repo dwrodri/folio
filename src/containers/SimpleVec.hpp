@@ -136,7 +136,6 @@ SimpleVec<T>&& SimpleVec<T>::operator=(SimpleVec&& other) {
     return std::forward<SimpleVec>(*this);
 }
 
-// d'tor
 template <typename T>
 SimpleVec<T>::~SimpleVec() {
     allocator_.deallocate(memory_loc_, capacity_);
@@ -189,7 +188,7 @@ T& SimpleVec<T>::operator[](const size_t index) const noexcept {
 
 template <typename T>
 bool SimpleVec<T>::isSorted(std::function<bool(T const, T const)> comp) const {
-    for (int i = 0; i < size_ - 1; i++) {
+    for (size_t i = 0; i < size_ - 1; i++) {
         if (!comp(memory_loc_[i], memory_loc_[i + 1])) {
             return false;
         }
