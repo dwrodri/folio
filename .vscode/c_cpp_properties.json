@@ -16,7 +16,9 @@
         {
             "name": "Debian",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/include/**",
+                "/usr/local/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

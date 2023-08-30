@@ -1,13 +1,12 @@
 #pragma once
 #include <cstring>
+#include <iostream>
 #include <memory>
 
 namespace folio {
 
-static constexpr size_t DEFAULT_INITIAL_SIMPLEVEC_CAPACITY = 16;
-static constexpr float DEFAULT_SIMPLEVEC_AUGMENT_THRESHOLD = 0.50;
-
 template <typename T>
+/// a simple fixed-size 2D array for linear algebra ops
 class SimpleMat {
   private:
     /// the location of the data owned by this container
@@ -19,9 +18,9 @@ class SimpleMat {
 
   public:
     // default c'tor
-    SimpleMat() = default;
+    SimpleMat();
     // params c'tor
-    SimpleMat(size_t const rows, size_t const cols, const T fill_value = T{0});
+    SimpleMat(size_t const rows, size_t const cols, T const fill_value = T{0});
     // copy c'tor (deep copy)
     SimpleMat(SimpleMat const& other);
     // move c'tor
@@ -35,38 +34,58 @@ class SimpleMat {
 
     /// read-only view of size
     size_t size() const;
+    size_t rows() const;
+    size_t cols() const;
 
-    /// since this is complying with C++17, we need a method of accessing nested
+    /// providing square bracket operator is sketchy, so instead we provide an at()
     T& at(size_t const row, size_t const col) noexcept;
-    T& at(size_t const row, size_t const col) const;
+    T& at(size_t const row, size_t const col) const noexcept;
 };
 
 template <typename T>
-SimpleMat<T>::SimpleMat(size_t const rows, size_t const cols, T const fill_value = T{0})
+SimpleMat<T>::SimpleMat() : rows_{0}, cols_{0}, memory_loc_{nullptr} {}
+
+template <typename T>
+SimpleMat<T>::SimpleMat(size_t const rows, size_t const cols, T const fill_value)
         : rows_{rows},
           cols_{cols},
-          memory_loc_{std::allocator<T>.allocate(rows * cols)} {
-    std::memcpy_s(memory_loc_, rows_ * cols_, other.memory_loc_, other.size())
+          memory_loc_{std::allocator<T>().allocate(rows * cols)} {
+    for (size_t i = 0; i < rows_ * cols_; i++) {
+        memory_loc_[i] = fill_value;
+    }
 }
 
 template <typename T>
 SimpleMat<T>::SimpleMat(SimpleMat const& other)
-        : memory_loc_{std::allocator<T>.allocate(other.size())},
+        : memory_loc_{std::allocator<T>().allocate(other.size())},
           rows_{other.rows_},
-          cols_{other.cols_},
-          // does this always perform a deep copy?
-          std::strncpy(other.memory_loc_, memory_loc_, rows * cols * sizeof(T));
-
+          cols_{other.cols_} {
+    std::memcpy(memory_loc_, other.memory_loc_, rows_ * cols_ * sizeof(T));
 }
 
 template <typename T>
+SimpleMat<T>::SimpleMat(SimpleMat&& other)
+        : memory_loc_{other.memory_loc_}, rows_{other.rows_}, cols_{other.cols_} {
+    other.memory_loc_ = nullptr;
+}
+template <typename T>
 SimpleMat<T>::~SimpleMat() {
-    allocator_.deallocate(memory_loc_, rows_ * cols_);
+    std::allocator<T>().deallocate(memory_loc_, rows_ * cols_);
 }
 
 template <typename T>
 size_t SimpleMat<T>::size() const {
     return rows_ * cols_;
+}
+
+template <typename T>
+size_t SimpleMat<T>::rows() const {
+    return rows_;
+}
+
+template <typename T>
+size_t SimpleMat<T>::cols() const {
+    return cols_;
 }
 
 template <typename T>
