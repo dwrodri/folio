@@ -20,7 +20,7 @@ class SimpleVec {
     size_t size_;
 
     /// double the capacity of the memory buffer
-    void augment();
+    void augment_();
 
   public:
     // default c'tor
@@ -56,14 +56,14 @@ class SimpleVec {
     /// read-only ref to last value
     T& back() const;
 
-    /// index operator which
+    /// index operator which returns the value
     T& operator[](const size_t index) noexcept;
 
     T& operator[](const size_t index) const noexcept;
 };
 
 template <typename T>
-void SimpleVec<T>::augment() {
+void SimpleVec<T>::augment_() {
     T* new_mem = allocator_.allocate(capacity_ * 2);
     std::memcpy(new_mem, memory_loc_, sizeof(T) * capacity_);
     allocator_.deallocate(memory_loc_, capacity_);
@@ -150,7 +150,7 @@ size_t SimpleVec<T>::size() const {
 template <typename T>
 void SimpleVec<T>::pushBack(T const elem) {
     if (static_cast<float>(size_) / capacity_ >= DEFAULT_SIMPLEVEC_AUGMENT_THRESHOLD) {
-        augment();
+        augment_();
     }
     memory_loc_[size_++] = elem;
 }

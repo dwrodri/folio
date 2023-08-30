@@ -2,7 +2,7 @@
 An accessible collection of interview type content I'm putting together.
 
 ## C++
-Mostly basic data structures and algos content. A lot o
+Mostly basic data structures and algos content. 
 
 ### Containers
 #### SimpleVec
