@@ -9,6 +9,7 @@ static constexpr size_t DEFAULT_INITIAL_SIMPLEVEC_CAPACITY = 16;
 static constexpr float DEFAULT_SIMPLEVEC_AUGMENT_THRESHOLD = 0.50;
 
 template <typename T>
+/// A variably-sized array-like container
 class SimpleVec {
   private:
     // the thing that gives us memory
