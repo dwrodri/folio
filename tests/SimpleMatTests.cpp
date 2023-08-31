@@ -9,12 +9,12 @@ TEST_CASE("Default c'tor", "[main]") {
 }
 
 TEST_CASE("Size", "[main]") {
-    folio::SimpleMat<int> x{12, 12};
+    folio::SimpleMat<int> x{12, 12, 0};
     REQUIRE(x.size() == 144);
 }
 
 TEST_CASE("Rows and Cols", "[main]") {
-    folio::SimpleMat<int> x{4, 5};
+    folio::SimpleMat<int> x{4, 5, 0};
     REQUIRE(x.rows() == 4);
     REQUIRE(x.cols() == 5);
 }
@@ -44,6 +44,18 @@ TEST_CASE("Move c'tor", "[main]") {
     for (size_t i = 0; i < moved.rows(); i++) {
         for (size_t j = 0; j < moved.cols(); j++) {
             REQUIRE(moved.at(i, j) == 1);
+        }
+    }
+}
+
+TEST_CASE("Matmul", "[main]") {
+    folio::SimpleMat<uint32_t>a {4,3, std::vector<uint32_t>{1,2,1,0,1,0,2,3,4,3,9,5}};
+    folio::SimpleMat<uint32_t>b {3,2, std::vector<uint32_t>{2,5,6,7,1,8}};
+    folio::SimpleMat<uint32_t>answer {4,2, std::vector<uint32_t>{15,27,6,7,26,63,65,118}};
+    folio::SimpleMat<uint32_t>computed = folio::naive_matmul(a,b);
+    for(size_t i = 0; i < answer.rows(); i++) {
+        for(size_t j = 0; j < answer.cols(); j++){
+            REQUIRE(answer.at(i,j) == computed.at(i,j));
         }
     }
 }
