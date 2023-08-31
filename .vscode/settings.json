@@ -1,7 +1,7 @@
 {
     "cmake.sourceDirectory": "${workspaceFolder}/.",
     "files.associations": {
-        "limits": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "array": "cpp"
     }
 }
