@@ -2,4 +2,6 @@
 
 namespace folio {
 void BubbleSort(SimpleVec& v);
-}
+
+void QuickSort(SimpleVec)
+}  // namespace folio

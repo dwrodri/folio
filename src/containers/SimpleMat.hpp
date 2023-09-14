@@ -1,8 +1,10 @@
 #pragma once
 #include <cstring>
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <vector>
+
 namespace folio {
 
 template <typename T>
@@ -21,8 +23,10 @@ class SimpleMat {
     SimpleMat();
     /// params c'tor
     SimpleMat(size_t const rows, size_t const cols, T const fill_value);
-    /// std::array to SimpleMat
-    SimpleMat(size_t rows, size_t cols, std::vector<T> const data);
+    /// std::vector to SimpleMat
+    SimpleMat(size_t const rows, size_t const cols, std::vector<T> const data);
+    /// fill with callable
+    SimpleMat(size_t const rows, size_t const cols, std::function<T(void)> callable);
     /// copy c'tor (deep copy)
     SimpleMat(SimpleMat const& other);
     /// move c'tor
@@ -66,6 +70,17 @@ SimpleMat<T>::SimpleMat(size_t const rows, size_t const cols, std::vector<T> con
           cols_{cols},
           memory_loc_{std::allocator<T>().allocate(rows_ * cols_)} {
     for (size_t i = 0; i < size(); i++) memory_loc_[i] = data[i];
+}
+
+template <typename T>
+SimpleMat<T>::SimpleMat(
+        size_t const rows, size_t const cols, std::function<T(void)> callable)
+        : rows_{rows},
+          cols_{cols},
+          memory_loc_{std::allocator<T>().allocate(rows_ * cols_)} {
+    for (size_t i = 0; i < rows_ * cols_; i++) {
+        memory_loc_[i] = callable();
+    }
 }
 template <typename T>
 SimpleMat<T>::SimpleMat(SimpleMat const& other)
@@ -115,16 +130,23 @@ T& SimpleMat<T>::at(const size_t row, const size_t col) const noexcept {
 /// @param a any mat of shape (J,K)
 /// @param b any mat of shape (K,L)
 /// @note The last dimension of `a` MUST BE THE SAME AS THE FIRST DIM OF `b`
-/// @return the matrix multiply of A and B
 template <typename T>
-SimpleMat<T> naive_matmul(SimpleMat<T> a, SimpleMat<T> b) {
-    SimpleMat<T> result{a.rows(), b.cols(), T{0}};
+void naive_matmul(SimpleMat<T> const& a, SimpleMat<T> const& b, SimpleMat<T>& c) {
     for (size_t a_row_idx = 0; a_row_idx < a.rows(); a_row_idx++)
         for (size_t b_col_idx = 0; b_col_idx < b.cols(); b_col_idx++)
             for (size_t dot_product_idx = 0; dot_product_idx < a.cols();
                     dot_product_idx++)
-                result.at(a_row_idx, b_col_idx) += a.at(a_row_idx, dot_product_idx) *
-                                                   b.at(dot_product_idx, b_col_idx);
-    return result;
+                c.at(a_row_idx, b_col_idx) += a.at(a_row_idx, dot_product_idx) *
+                                              b.at(dot_product_idx, b_col_idx);
+}
+
+template <typename T, size_t B = 16>
+void matmul_tiled(SimpleMat<T> const& a, SimpleMat<T> const& b, SimpleMat<T>& c) {
+    for (size_t jj = 0; jj < b.cols(); jj += B)
+        for (size_t kk = 0; kk < a.cols(); kk += B)
+            for (size_t i = 0; i < a.rows(); i++)
+                for (size_t j = jj; j < std::min(jj + B, b.cols()); j++)
+                    for (size_t k = kk; k < std::min(kk + B, a.cols()); k++)
+                        c.at(i, j) += a.at(i, k) * b.at(k, j);
 }
 }  // namespace folio
