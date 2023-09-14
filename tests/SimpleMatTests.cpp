@@ -49,13 +49,31 @@ TEST_CASE("Move c'tor", "[main]") {
 }
 
 TEST_CASE("Matmul", "[main]") {
-    folio::SimpleMat<uint32_t>a {4,3, std::vector<uint32_t>{1,2,1,0,1,0,2,3,4,3,9,5}};
-    folio::SimpleMat<uint32_t>b {3,2, std::vector<uint32_t>{2,5,6,7,1,8}};
-    folio::SimpleMat<uint32_t>answer {4,2, std::vector<uint32_t>{15,27,6,7,26,63,65,118}};
-    folio::SimpleMat<uint32_t>computed = folio::naive_matmul(a,b);
-    for(size_t i = 0; i < answer.rows(); i++) {
-        for(size_t j = 0; j < answer.cols(); j++){
-            REQUIRE(answer.at(i,j) == computed.at(i,j));
+    folio::SimpleMat<uint32_t> a{
+            4, 3, std::vector<uint32_t>{1, 2, 1, 0, 1, 0, 2, 3, 4, 3, 9, 5}};
+    folio::SimpleMat<uint32_t> b{3, 2, std::vector<uint32_t>{2, 5, 6, 7, 1, 8}};
+    folio::SimpleMat<uint32_t> c{a.rows(), b.cols(), 0};
+    folio::SimpleMat<uint32_t> answer{
+            4, 2, std::vector<uint32_t>{15, 27, 6, 7, 26, 63, 65, 118}};
+    folio::naive_matmul(a, b, c);
+    for (size_t i = 0; i < answer.rows(); i++) {
+        for (size_t j = 0; j < answer.cols(); j++) {
+            REQUIRE(answer.at(i, j) == c.at(i, j));
+        }
+    }
+}
+
+TEST_CASE("Tiled MatMul", "[main]") {
+    folio::SimpleMat<uint32_t> a{
+            4, 3, std::vector<uint32_t>{1, 2, 1, 0, 1, 0, 2, 3, 4, 3, 9, 5}};
+    folio::SimpleMat<uint32_t> b{3, 2, std::vector<uint32_t>{2, 5, 6, 7, 1, 8}};
+    folio::SimpleMat<uint32_t> c{a.rows(), b.cols(), 0};
+    folio::SimpleMat<uint32_t> answer{
+            4, 2, std::vector<uint32_t>{15, 27, 6, 7, 26, 63, 65, 118}};
+    folio::matmul_tiled(a, b, c);
+    for (size_t i = 0; i < answer.rows(); i++) {
+        for (size_t j = 0; j < answer.cols(); j++) {
+            REQUIRE(answer.at(i, j) == c.at(i, j));
         }
     }
 }
