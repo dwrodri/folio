@@ -97,7 +97,7 @@ SimpleVec<T>::SimpleVec(SimpleVec const& other)
           memory_loc_{allocator_.allocate(other.capacity())},
           capacity_{other.capacity()},
           size_{other.size()} {
-    // does this always perform a deep copy?
+    // does this always perform a deep copy? ¯\_(ツ)_/¯
     for (size_t i = 0; i < size_; i++) {
         memory_loc_[i] = other[i];
     }

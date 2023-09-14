@@ -92,7 +92,7 @@ SimpleMat<T>::SimpleMat(SimpleMat const& other)
 
 template <typename T>
 SimpleMat<T>::SimpleMat(SimpleMat&& other)
-        : memory_loc_{other.memory_loc_}, rows_{other.rows_}, cols_{other.cols_} {
+        : rows_{other.rows_}, cols_{other.cols_}, memory_loc_{other.memory_loc_} {
     other.memory_loc_ = nullptr;
 }
 template <typename T>
