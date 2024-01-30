@@ -22,10 +22,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Let's ensure -std=c++xx instead of -std=g++xx
     set(CMAKE_CXX_EXTENSIONS OFF)
 
-    
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        add_compile_options(-fsanitize=address -fsanitize=undefined)
+        # \add_compile_options(-fsanitize=address -fsanitize=undefined)
     endif()
+
     # Let's nicely support folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
@@ -36,7 +36,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 # add platform flag
 add_compile_definitions(DARCH=${CMAKE_SYSTEM_PROCESSOR})
 
-#add warnings
+# add warnings
 add_compile_options(-Wall -Wextra)
 
 # facilitate perf tracing by preserving frame pointers
