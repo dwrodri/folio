@@ -5,3 +5,6 @@
 add_executable(matmul_benchmark matmul_benchmark.cpp)
 target_include_directories(matmul_benchmark PRIVATE ../src/containers)
 target_compile_features(matmul_benchmark PRIVATE cxx_std_17)
+
+add_executable(rotate_image rotate_image.cpp)
+target_compile_features(rotate_image PRIVATE cxx_std_17)
