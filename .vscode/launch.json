@@ -29,5 +29,18 @@
             "externalConsole": false,
             "MIMode": "gdb",
         },
+        {
+            "name": "clang (Debian) - build and debug SimpleMat tests",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "program": "${workspaceFolder}/build/tests/simplemat_test",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "MIDebuggerPath": "/usr/bin/gdb",
+        },
     ]
 }

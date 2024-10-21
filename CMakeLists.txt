@@ -50,10 +50,15 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
 elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
     add_compile_definitions(MIN_SIZE_REL_BUILD)
 else()
-    add_compile_definitions(RELEASE_BUILD)
+    add_compile_options(-fopenmp)
+    add_compile_options(-ftree-vectorize -ffast-math)
+    add_compile_options(-mtune=native)
+
+    add_compile_definitions(RELEASE_BUILD=1)
 endif()
 
-add_subdirectory(apps)
+# library code here
+add_subdirectory(src/apps/)
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well

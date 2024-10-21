@@ -9,6 +9,7 @@ static constexpr size_t DEFAULT_INITIAL_SIMPLEVEC_CAPACITY = 16;
 static constexpr float DEFAULT_SIMPLEVEC_AUGMENT_THRESHOLD = 0.50;
 
 template <typename T>
+/// A variably-sized array-like container
 class SimpleVec {
   private:
     // the thing that gives us memory
@@ -21,7 +22,7 @@ class SimpleVec {
     size_t size_;
 
     /// double the capacity of the memory buffer
-    void augment();
+    void augment_();
 
   public:
     // default c'tor
@@ -57,7 +58,7 @@ class SimpleVec {
     /// read-only ref to last value
     T& back() const;
 
-    /// index operator
+    /// index operator which returns the value
     T& operator[](const size_t index) noexcept;
 
     /// index operator
@@ -68,7 +69,7 @@ class SimpleVec {
 };
 
 template <typename T>
-void SimpleVec<T>::augment() {
+void SimpleVec<T>::augment_() {
     T* new_mem = allocator_.allocate(capacity_ * 2);
     std::memcpy(new_mem, memory_loc_, sizeof(T) * capacity_);
     allocator_.deallocate(memory_loc_, capacity_);
@@ -96,7 +97,7 @@ SimpleVec<T>::SimpleVec(SimpleVec const& other)
           memory_loc_{allocator_.allocate(other.capacity())},
           capacity_{other.capacity()},
           size_{other.size()} {
-    // does this always perform a deep copy?
+    // does this always perform a deep copy? ¯\_(ツ)_/¯
     for (size_t i = 0; i < size_; i++) {
         memory_loc_[i] = other[i];
     }
@@ -154,7 +155,7 @@ size_t SimpleVec<T>::size() const {
 template <typename T>
 void SimpleVec<T>::pushBack(T const elem) {
     if (static_cast<float>(size_) / capacity_ >= DEFAULT_SIMPLEVEC_AUGMENT_THRESHOLD) {
-        augment();
+        augment_();
     }
     memory_loc_[size_++] = elem;
 }
