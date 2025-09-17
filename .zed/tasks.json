@@ -1,0 +1,54 @@
+[
+  {
+    "label": "C++: Debug Build",
+    "command": "/usr/bin/clang++",
+    "args": [
+      "-fcolor-diagnostics",
+      "-fansi-escape-codes",
+      "-g",
+      "-O0",
+      "-DDEBUG",
+      "${ZED_FILE}",
+      "-o",
+      "${ZED_DIRNAME}/${ZED_STEM}_debug"
+    ],
+    "env": {},
+    "cwd": "${ZED_DIRNAME}",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "C++: Release Build",
+    "command": "/usr/bin/clang++",
+    "args": [
+      "-fcolor-diagnostics",
+      "-fansi-escape-codes",
+      "-O3",
+      "-DNDEBUG",
+      "-flto",
+      "${ZED_FILE}",
+      "-o",
+      "${ZED_DIRNAME}/${ZED_STEM}_release"
+    ],
+    "env": {},
+    "cwd": "${ZED_DIRNAME}",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "C++: Clean Build Files",
+    "command": "rm",
+    "args": [
+      "-f",
+      "${ZED_DIRNAME}/${ZED_STEM}_debug",
+      "${ZED_DIRNAME}/${ZED_STEM}_release"
+    ],
+    "env": {},
+    "cwd": "${ZED_DIRNAME}",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  }
+]

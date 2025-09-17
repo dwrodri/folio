@@ -1,5 +1,9 @@
+
 #cmake BS
 build/
+
+# build cache
+.cache/
 
 # Prerequisites
 *.d

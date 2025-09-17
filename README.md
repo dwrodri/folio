@@ -1,54 +1,76 @@
-# folio
-A sort of template repo filled with interview-type content.
+# Vectionary
+A C++20 application for making HTTP requests to AI image generation services, specifically the Gemini API.
 
-Eventually I'd like to have a huge test suite that runs through a bunch of 
-solutions to common whiteboard problems.
+## Features
+- Modern C++20 implementation
+- Lightweight HTTP client integration using cpp20-http-client
+- JSON handling with nlohmann/json
+- Simple API for making Gemini image generation requests
+- Minimal dependencies with in-tree dependency management
 
-## Disclaimer
-The intent of this code is, quite frankly, to help me get hired. My résumé is
-[here](https://derekrodriguez.dev/resume.pdf). Once I start working full-time 
-I'm probably not going to maintain this code.
-
-The secondary intent is to build a collection of SWE practices + interview 
-solutions which demonstrate that I'm not incompetent when it comes to writing 
-C++. I might do the same for other languages in the future.
-
-If you're a student, or someone learning C++, the code will probably serve as 
-a somewhat useful reference for some of the content that you'd learn in your 
-algorithms and data structures course. 
-
-**There is not remotely enough work going into this right now for it to be
-considered for production use**.
+## Prerequisites
+- C++20 compatible compiler (GCC 10+, Clang 12+, or MSVC 2019+)
+- CMake 3.12+
+- OpenSSL (on Linux/macOS) - automatically handled by package managers
 
 ## Tech Stack
-- C++17 support at the moment. I'm considering adding concepts it's not a widely adopted feature yet.
-- [CMake 3.12+](https://cmake.org/) build system 
+- **C++20** with modern features and concepts
+- [CMake 3.12+](https://cmake.org/) build system with FetchContent dependency management
+- [cpp20-http-client](https://github.com/avocadoboi/cpp20-http-client) for HTTP/HTTPS requests
+- [nlohmann/json](https://github.com/nlohmann/json) for JSON parsing
 - [Catch2](https://github.com/catchorg/Catch2) + CTest unit tests for the library functionality
 - [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html) +
 [AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html) linked
 against all the unit tests for the debug build.
 - GitHub CI workflows for running the test suite with GCC 10 + Clang 14 on Debian
 
-## Contents
-### Containers
-#### SimpleVec
-A resizeable generic container, similar to
-[`std::vector`](https://en.cppreference.com/w/cpp/container/vector). Maybe
-eventually I'll implement an iterator interface.
+## Quick Start
 
-#### BinaryTree
-A generic [binary tree](https://en.wikipedia.org/wiki/Binary_tree). Note that at
-the moment, it performs heap allocations for every element! The goal with this
-codebase is to focus on correctness first, and then performance second.
+### Building
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
 
-#### AVLTree
+### Usage
+1. Get a Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Run the application:
+```bash
+./vectionary your_api_key_here "A beautiful sunset over mountains"
+```
 
-#### RBTree
 
-### Algorithms
-#### Sorts (Bubble Sort / Insertion Sort / Quick Sort)
-What it says on the lid. Some quick searches that I wrote for performance
-#### DFS 
-#### BFS
+## Project Structure
+```
+vectionary/
+├── .github/
+│   └── workflows/
+│       └── tests.yaml       # GitHub CI workflow
+├── .vscode/                 # VSCode configuration
+├── apps/
+│   ├── CMakeLists.txt       # App build configuration
+│   └── VectionaryApp.cpp    # Main application with Gemini integration
+├── src/
+│   ├── algos/
+│   │   └── Sorts.hpp        # Sorting algorithms implementation
+│   └── containers/
+│       ├── BinaryTree.hpp   # Binary tree data structure
+│       └── SimpleVec.hpp    # Vector-like container
+├── tests/
+│   ├── BinaryTreeTest.cpp   # Binary tree unit tests
+│   ├── CMakeLists.txt       # Test build configuration
+│   ├── SimpleVecTests.cpp   # SimpleVec unit tests
+│   └── SortsTest.cpp        # Sorting algorithms unit tests
+├── .clang-format            # Code formatting rules
+├── .clang-tidy              # Static analysis configuration
+├── .gitignore               # Git ignore patterns
+├── CMakeLists.txt           # Main build configuration
+├── LICENSE                  # Project license
+└── README.md                # This file
+```
 
-If you like this content, my résumé is [here](https://derekrodriguez.dev/resume.pdf)
+## Dependencies
+All dependencies are automatically fetched at build time via CMake FetchContent:
+- **cpp20-http-client v3.0.0**: Modern C++20 HTTP client
+- **nlohmann/json v3.11.3**: JSON library for parsing API responses

@@ -1,3 +1,5 @@
 
-add_executable(queens_kill_king QueensKillKing.cpp)
-add_executable(min_path_sum MinPathSum.cpp)
+add_executable(vectionary VectionaryApp.cpp)
+
+        target_link_libraries(vectionary PRIVATE
+                        Cpp20HttpClient::cpp20_http_client nlohmann_json::nlohmann_json)

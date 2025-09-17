@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(
-    Folio
+    VECTIONARY
     VERSION 0.1
     DESCRIPTION "Please Hire me"
     LANGUAGES CXX
@@ -17,7 +17,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
 
     # set standards
-    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 20)
 
     # Let's ensure -std=c++xx instead of -std=g++xx
     set(CMAKE_CXX_EXTENSIONS OFF)
@@ -28,6 +28,27 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     # Let's nicely support folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+endif()
+
+# Fetch dependencies
+if(NOT TARGET Cpp20HttpClient::cpp20_http_client)
+    FetchContent_Declare(
+        Cpp20HttpClient
+        GIT_REPOSITORY https://github.com/avocadoboi/cpp20-http-client.git
+        GIT_TAG v3.0.0
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(Cpp20HttpClient)
+endif()
+
+if(NOT TARGET nlohmann_json::nlohmann_json)
+    FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.11.3
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(nlohmann_json)
 endif()
 
 # export compilation database

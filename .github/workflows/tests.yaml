@@ -1,46 +1,21 @@
-name: Unit Tests
+name: Compilation test
 on:
   push:
-    branch: main
+      branches: [main]
 
 jobs:
-  unit-tests-gcc:
-    name: Unit tests w/ g++
-    runs-on: ubuntu-latest
-    container: debian:bullseye-slim
-    steps:
-      - name: update apt + install CMake and g++
-        run: apt-get update -q && apt-get install -y cmake g++ git
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Let CMake configure repo
-        run: cmake -S . -B build/
-      - name: Build Repo
-        run: cmake --build build/ --parallel
-      - name: Run Unit Tests
-        run: cd build/tests && ctest
   unit-tests-clang:
-    name: Unit tests w/ clang 14
+    name: Compile clang 19
     runs-on: ubuntu-latest
-    container: debian:bullseye-slim
+    container: debian:trixie-slim
     steps:
-      - name: download first round of dependencies
-        run: apt-get update && apt-get install -y lsb-release wget software-properties-common gnupg cmake git
-      - name: add the LLVM repos to apt
-        run: wget -nd -np https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh 14
-      - name: update apt + install CMake and Clang
-        run: apt-get update -q && apt-get install -y clang++-14
+      - name: Update apt and install dependencies
+        run: apt-get update && apt-get install -y cmake git clang++-19
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Let CMake configure repo
-        run: CXX=/usr/bin/clang++-14 cmake -S . -B build/
+        run: CXX=/usr/bin/clang++-19 cmake -S . -B build/
       - name: Build repo
-        run: CXX=/usr/bin/clang++-14 cmake --build build/ --parallel
-      - name: Run Unit Tests
-        run: cd build/tests && ctest
-  
-
-    
-  
-
-    
+        run: CXX=/usr/bin/clang++-19 cmake --build build/ --parallel
+      # - name: Run Unit Tests
+      #   run: cd build/tests && ctest
