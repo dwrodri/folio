@@ -29,12 +29,12 @@ unit-tests-clang:
     - apt-get install -y lsb-release wget software-properties-common gnupg cmake git
     - wget -nd -np https://apt.llvm.org/llvm.sh
     - chmod +x llvm.sh
-    - ./llvm.sh 14
+    - ./llvm.sh 22
     - apt-get update -q
-    - apt-get install -y clang++-14
+    - apt-get install -y clang++-22
   script:
-    - CXX=/usr/bin/clang++-14 cmake -S . -B build/
-    - CXX=/usr/bin/clang++-14 cmake --build build/ --parallel
+    - CXX=/usr/bin/clang++-22 cmake -S . -B build/
+    - CXX=/usr/bin/clang++-22 cmake --build build/ --parallel
     - cd build/tests && ctest --output-on-failure
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
