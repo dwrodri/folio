@@ -9,6 +9,7 @@ default:
     BUILD_DIR: build
     TEST_DIR: build/tests
     COMMON_PACKAGES: git cmake
+    DEBIAN_FRONTEND: noninteractive
 
 .unit-test-template:
   stage: test
@@ -22,8 +23,8 @@ unit-tests-gcc:
     - .variables
     - .unit-test-template
   before_script:
-    - apt-get update -q
-    - apt-get install -y ${COMMON_PACKAGES} g++
+    - apt-get update -qq
+    - apt-get install -yqq ${COMMON_PACKAGES} g++
   script:
     - cmake -S . -B ${BUILD_DIR}/
     - cmake --build ${BUILD_DIR}/ --parallel
@@ -34,12 +35,11 @@ unit-tests-clang:
     - .variables
     - .unit-test-template
   before_script:
-    - apt-get update -q
-    - apt-get install -y ${COMMON_PACKAGES} lsb-release wget gnupg ca-certificates
-    - wget -nd -np https://apt.llvm.org/llvm.sh
+    - apt-get update -qq
+    - apt-get install -yqq ${COMMON_PACKAGES} lsb-release wget gnupg ca-certificates
+    - wget -q -nd -np https://apt.llvm.org/llvm.sh
     - chmod +x llvm.sh
-    - ./llvm.sh 22
-    - apt-get install -y clang++-22
+    - bash ./llvm.sh 22 >/dev/null 2>&1
   script:
     - export CXX=/usr/bin/clang++-22
     - cmake -S . -B ${BUILD_DIR}/
