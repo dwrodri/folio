@@ -22,7 +22,7 @@ A C++20 application for making HTTP requests to AI image generation services, sp
 - [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html) +
 [AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html) linked
 against all the unit tests for the debug build.
-- GitHub CI workflows for running the test suite with GCC 10 + Clang 14 on Debian
+- GitLab CI pipelines for running the test suite with GCC 10 + Clang 14 on Debian
 
 ## Quick Start
 
