@@ -2,7 +2,7 @@ stages:
   - test
 
 default:
-  image: debian:bullseye-slim
+  image: debian:trixie-slim
   before_script:
     - apt-get update -q
     - apt-get install -y git cmake
