@@ -25,12 +25,11 @@ unit-tests-clang:
   stage: test
   tags: []
   before_script:
-    - apt-get update
-    - apt-get install -y lsb-release wget software-properties-common gnupg cmake git
+    - apt-get update -q
+    - apt-get install -y lsb-release wget gnupg ca-certificates cmake git
     - wget -nd -np https://apt.llvm.org/llvm.sh
     - chmod +x llvm.sh
     - ./llvm.sh 22
-    - apt-get update -q
     - apt-get install -y clang++-22
   script:
     - CXX=/usr/bin/clang++-22 cmake -S . -B build/
