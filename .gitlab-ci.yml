@@ -3,38 +3,45 @@ stages:
 
 default:
   image: debian:trixie-slim
-  before_script:
-    - apt-get update -q
-    - apt-get install -y git cmake
 
-unit-tests-gcc:
+.variables:
+  variables:
+    BUILD_DIR: build
+    TEST_DIR: build/tests
+    COMMON_PACKAGES: git cmake
+
+.unit-test-template:
   stage: test
   tags: []
-  before_script:
-    - apt-get update -q
-    - apt-get install -y git cmake g++
-  script:
-    - cmake -S . -B build/
-    - cmake --build build/ --parallel
-    - cd build/tests && ctest --output-on-failure
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-unit-tests-clang:
-  stage: test
-  tags: []
+unit-tests-gcc:
+  extends:
+    - .variables
+    - .unit-test-template
   before_script:
     - apt-get update -q
-    - apt-get install -y lsb-release wget gnupg ca-certificates cmake git
+    - apt-get install -y ${COMMON_PACKAGES} g++
+  script:
+    - cmake -S . -B ${BUILD_DIR}/
+    - cmake --build ${BUILD_DIR}/ --parallel
+    - cd ${TEST_DIR} && ctest --output-on-failure
+
+unit-tests-clang:
+  extends:
+    - .variables
+    - .unit-test-template
+  before_script:
+    - apt-get update -q
+    - apt-get install -y ${COMMON_PACKAGES} lsb-release wget gnupg ca-certificates
     - wget -nd -np https://apt.llvm.org/llvm.sh
     - chmod +x llvm.sh
     - ./llvm.sh 22
     - apt-get install -y clang++-22
   script:
-    - CXX=/usr/bin/clang++-22 cmake -S . -B build/
-    - CXX=/usr/bin/clang++-22 cmake --build build/ --parallel
-    - cd build/tests && ctest --output-on-failure
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - export CXX=/usr/bin/clang++-22
+    - cmake -S . -B ${BUILD_DIR}/
+    - cmake --build ${BUILD_DIR}/ --parallel
+    - cd ${TEST_DIR} && ctest --output-on-failure
